@@ -1,0 +1,11 @@
+.App {
+  font-family: sans-serif;
+  /*text-align: center;*/
+}
+input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  -moz-transform: scale(1.4);
+  -webkit-transform: scale(1.4);
+  transform: scale(1.4);
+}
