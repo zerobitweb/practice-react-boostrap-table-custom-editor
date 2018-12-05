@@ -2,6 +2,7 @@
   font-family: sans-serif;
   /*text-align: center;*/
 }
+/* checkbox style */
 input[type="checkbox"] {
   width: 24px;
   height: 24px;

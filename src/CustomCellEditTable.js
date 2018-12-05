@@ -1,10 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import { FormControl, Button } from "react-bootstrap";
+import { FormControl, Button, Modal } from "react-bootstrap";
+import dateformat from "dateformat";
+import DatePicker from "react-date-picker";
 
+// Data
 const products = [];
 
+// Combobox options
 const options = [
   { value: "", label: "" },
   { value: "001", label: "Label001" },
@@ -13,6 +17,7 @@ const options = [
   { value: "004", label: "Label004" }
 ];
 
+// Create Data
 function addProducts(quantity) {
   const startId = products.length;
   for (let i = 0; i < quantity; i++) {
@@ -21,7 +26,8 @@ function addProducts(quantity) {
       id: id,
       customText: "CustomText" + id,
       customCheck: 1,
-      customSelect: "001"
+      customSelect: "001",
+      customDate: "2018/12/05"
     });
   }
 }
@@ -101,7 +107,6 @@ class CustomCheckboxEditor extends React.Component {
     );
   }
 }
-
 // CustomSelectEditor
 class CustomSelectEditor extends React.Component {
   constructor(props) {
@@ -142,7 +147,61 @@ class CustomSelectEditor extends React.Component {
     );
   }
 }
-
+// CustomDatepickerEditor
+class CustomDatepickerEditor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.updateData = this.updateData.bind(this);
+    this.state = {
+      value: new Date(props.defaultValue),
+      open: true
+    };
+  }
+  focus() {
+    // this.refs.inputRef.focus();
+    let node = ReactDOM.findDOMNode(this.refs.inputRef);
+    if (node && node.focus instanceof Function) node.focus();
+  }
+  updateData() {
+    this.props.onUpdate(dateformat(this.state.value, "yyyy/mm/dd"));
+  }
+  close = () => {
+    this.setState({ open: false });
+    this.props.onUpdate(this.props.defaultValue);
+  };
+  render() {
+    return (
+      <Modal
+        show={this.state.open}
+        onHide={this.close}
+        animation={true}
+        bsSize="small"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Modal title</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <DatePicker
+            ref="inputRef"
+            className={this.props.editorClass}
+            style={{ display: "inline" }}
+            value={new Date(this.state.value)}
+            onKeyDown={this.props.onKeyDown}
+            onChange={ev => {
+              this.setState({ value: ev });
+            }}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={this.updateData} bsStyle="primary">
+            Save
+          </Button>
+          <Button onClick={this.close}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+}
 // Formatters
 const customTextFormatter = (cell, row) => {
   return <FormControl type="text" defaultValue={cell} />;
@@ -181,6 +240,9 @@ const createCustomCheckboxEditor = (onUpdate, props) => (
 );
 const createCustomSelectEditor = (onUpdate, props) => (
   <CustomSelectEditor onUpdate={onUpdate} {...props} />
+);
+const createCustomDatepickerEditor = (onUpdate, props) => (
+  <CustomDatepickerEditor onUpdate={onUpdate} {...props} />
 );
 
 export default class CustomCellEditTable extends React.Component {
@@ -226,6 +288,13 @@ export default class CustomCellEditTable extends React.Component {
             }}
           >
             CustomSelect
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField="customDate"
+            customEditor={{ getElement: createCustomDatepickerEditor }}
+            tdStyle={{ textAlign: "left" }}
+          >
+            CustomDate
           </TableHeaderColumn>
         </BootstrapTable>
       </div>
