@@ -139,7 +139,7 @@ class CustomSelectEditor extends React.Component {
           this.setState({ value: ev.currentTarget.value });
         }}
       >
-        {options.map((option, idx) => (
+        {this.props.options.map((option, idx) => (
           <option value={option.value} key={idx}>
             {option.label}
           </option>
@@ -266,6 +266,7 @@ export default class CustomCellEditTable extends React.Component {
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField="customText"
+            editable={false}
             dataFormat={customTextFormatter}
             customEditor={{ getElement: createCustomTextEditor }}
             tdStyle={{ textAlign: "left" }}
@@ -274,6 +275,7 @@ export default class CustomCellEditTable extends React.Component {
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField="customCheck"
+            editable={true}
             dataFormat={customCheckboxFormatter}
             customEditor={{ getElement: createCustomCheckboxEditor }}
             tdStyle={{ textAlign: "left" }}
@@ -282,6 +284,7 @@ export default class CustomCellEditTable extends React.Component {
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField="customSelect"
+            editable={true}
             dataFormat={customSelectFormatter}
             customEditor={{
               getElement: createCustomSelectEditor,
@@ -292,6 +295,7 @@ export default class CustomCellEditTable extends React.Component {
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField="customDate"
+            editable={true}
             customEditor={{ getElement: createCustomDatepickerEditor }}
             tdStyle={{ textAlign: "left" }}
           >
@@ -300,6 +304,7 @@ export default class CustomCellEditTable extends React.Component {
           <TableHeaderColumn
             dataField="noCustom"
             editable={false}
+            customEditor={{ getElement: () => void 0 }}
             tdStyle={{ textAlign: "left" }}
           >
             NoCustom
