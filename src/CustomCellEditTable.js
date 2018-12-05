@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import { FormControl, Button, Modal } from "react-bootstrap";
+import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import dateformat from "dateformat";
 import DatePicker from "react-date-picker";
 
@@ -27,7 +27,8 @@ function addProducts(quantity) {
       customText: "CustomText" + id,
       customCheck: 1,
       customSelect: "001",
-      customDate: "2018/12/05"
+      customDate: "2018/12/05",
+      noCustom: "NoCustom" + id
     });
   }
 }
@@ -295,6 +296,13 @@ export default class CustomCellEditTable extends React.Component {
             tdStyle={{ textAlign: "left" }}
           >
             CustomDate
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField="noCustom"
+            editable={false}
+            tdStyle={{ textAlign: "left" }}
+          >
+            NoCustom
           </TableHeaderColumn>
         </BootstrapTable>
       </div>
