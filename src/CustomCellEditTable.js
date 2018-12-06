@@ -11,6 +11,7 @@ const products = [];
 // Combobox options
 const options = [
   { value: "", label: "" },
+  { value: "000", label: "Label000" },
   { value: "001", label: "Label001" },
   { value: "002", label: "Label002" },
   { value: "003", label: "Label003" },
@@ -26,9 +27,11 @@ function addProducts(quantity) {
       id: id,
       customText: "CustomText" + id,
       customCheck: 1,
-      customSelect: "001",
+      customSelect: "00" + id,
       customDate: "2018/12/05",
-      noCustom: "NoCustom" + id
+      noCustom: "NoCustom" + id,
+      customTime: "0" + id + ":00",
+      customDate2: "2018-12-0" + (id + 1)
     });
   }
 }
@@ -92,19 +95,21 @@ class CustomCheckboxEditor extends React.Component {
   }
   render() {
     return (
-      <input
-        ref="inputRef"
-        className={this.props.editorClass}
-        style={{ display: "inline" }}
-        type="checkbox"
-        defaultValue={this.state.value}
-        defaultChecked={this.state.value === 1 ? true : false}
-        onKeyDown={this.props.onKeyDown}
-        onBlur={this.updateData}
-        onChange={ev => {
-          this.setState({ value: ev.currentTarget.checked ? 1 : 0 });
-        }}
-      />
+      <div style={{ textAlign: "center" }}>
+        <input
+          ref="inputRef"
+          className={this.props.editorClass}
+          style={{ display: "inline" }}
+          type="checkbox"
+          defaultValue={this.state.value}
+          defaultChecked={this.state.value === 1 ? true : false}
+          onKeyDown={this.props.onKeyDown}
+          onBlur={this.updateData}
+          onChange={ev => {
+            this.setState({ value: ev.currentTarget.checked ? 1 : 0 });
+          }}
+        />
+      </div>
     );
   }
 }
@@ -203,6 +208,75 @@ class CustomDatepickerEditor extends React.Component {
     );
   }
 }
+// CustomTimeEditor
+class CustomTimeEditor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.defaultValue
+    };
+    this.updateData = this.updateData.bind(this);
+  }
+  focus() {
+    //this.refs.inputRef.focus();
+    let node = ReactDOM.findDOMNode(this.refs.inputRef);
+    if (node && node.focus instanceof Function) node.focus();
+  }
+  updateData() {
+    this.props.onUpdate(this.state.value);
+  }
+  render() {
+    return (
+      <FormControl
+        ref="inputRef"
+        className={this.props.editorClass}
+        style={{ display: "inline" }}
+        type="time"
+        defaultValue={this.state.value}
+        onKeyDown={this.props.onKeyDown}
+        onBlur={this.updateData}
+        onChange={ev => {
+          this.setState({ value: ev.currentTarget.value });
+        }}
+      />
+    );
+  }
+}
+// CustomDateEditor
+class CustomDateEditor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.defaultValue
+    };
+    this.updateData = this.updateData.bind(this);
+  }
+  focus() {
+    //this.refs.inputRef.focus();
+    let node = ReactDOM.findDOMNode(this.refs.inputRef);
+    if (node && node.focus instanceof Function) node.focus();
+  }
+  updateData() {
+    this.props.onUpdate(this.state.value);
+  }
+  render() {
+    return (
+      <FormControl
+        ref="inputRef"
+        className={this.props.editorClass}
+        style={{ display: "inline" }}
+        type="date"
+        defaultValue={this.state.value}
+        onKeyDown={this.props.onKeyDown}
+        onBlur={this.updateData}
+        onChange={ev => {
+          this.setState({ value: ev.currentTarget.value });
+        }}
+      />
+    );
+  }
+}
+
 // Formatters
 const customTextFormatter = (cell, row) => {
   return <FormControl type="text" defaultValue={cell} />;
@@ -227,6 +301,12 @@ const customSelectFormatter = (cell, row) => {
     </FormControl>
   );
 };
+const customTimeFormatter = (cell, row) => {
+  return <FormControl type="time" defaultValue={cell} />;
+};
+const customDateFormatter = (cell, row) => {
+  return <FormControl type="date" defaultValue={cell} />;
+};
 
 /*
   The getElement function take two arguments,
@@ -244,6 +324,12 @@ const createCustomSelectEditor = (onUpdate, props) => (
 );
 const createCustomDatepickerEditor = (onUpdate, props) => (
   <CustomDatepickerEditor onUpdate={onUpdate} {...props} />
+);
+const createCustomTimeEditor = (onUpdate, props) => (
+  <CustomTimeEditor onUpdate={onUpdate} {...props} />
+);
+const createCustomDateEditor = (onUpdate, props) => (
+  <CustomDateEditor onUpdate={onUpdate} {...props} />
 );
 
 export default class CustomCellEditTable extends React.Component {
@@ -276,9 +362,10 @@ export default class CustomCellEditTable extends React.Component {
           <TableHeaderColumn
             dataField="customCheck"
             editable={true}
+            headerAlign="center"
             dataFormat={customCheckboxFormatter}
             customEditor={{ getElement: createCustomCheckboxEditor }}
-            tdStyle={{ textAlign: "left" }}
+            tdStyle={{ textAlign: "center" }}
           >
             CustomCheckbox
           </TableHeaderColumn>
@@ -304,10 +391,29 @@ export default class CustomCellEditTable extends React.Component {
           <TableHeaderColumn
             dataField="noCustom"
             editable={false}
+            dataFormat={(cell, row) => cell}
             customEditor={{ getElement: () => void 0 }}
             tdStyle={{ textAlign: "left" }}
           >
             NoCustom
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField="customTime"
+            editable={true}
+            dataFormat={customTimeFormatter}
+            customEditor={{ getElement: createCustomTimeEditor }}
+            tdStyle={{ textAlign: "left" }}
+          >
+            CustomTime
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField="customDate2"
+            editable={true}
+            dataFormat={customDateFormatter}
+            customEditor={{ getElement: createCustomDateEditor }}
+            tdStyle={{ textAlign: "left" }}
+          >
+            CustomDate HTML5
           </TableHeaderColumn>
         </BootstrapTable>
       </div>
