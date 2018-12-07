@@ -10,3 +10,19 @@ input[type="checkbox"] {
   -webkit-transform: scale(1.4);
   transform: scale(1.4);
 }
+
+/* input date style */
+input[type="date"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="date"]::-webkit-clear-button {
+  -webkit-appearance: none;
+}
+
+/* input time style */
+input[type="time"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="time"]::-webkit-clear-button {
+  -webkit-appearance: none;
+}

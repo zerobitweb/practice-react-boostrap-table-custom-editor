@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { FormControl, Button, Modal } from "react-bootstrap";
+import { FormControl, Button, Modal, OverlayTrigger } from "react-bootstrap";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import dateformat from "dateformat";
 import DatePicker from "react-date-picker";
@@ -57,6 +57,7 @@ class CustomTextEditor extends React.Component {
     if (node && node.focus instanceof Function) node.focus();
   }
   updateData() {
+    console.log(`value:${this.state.value}`);
     this.props.onUpdate(this.state.value);
   }
   render() {
@@ -126,11 +127,18 @@ class CustomSelectEditor extends React.Component {
     // this.refs.inputRef.focus();
     let node = ReactDOM.findDOMNode(this.refs.inputRef);
     if (node && node.focus instanceof Function) node.focus();
+
+    console.log("#focus");
+    console.log(this);
   }
   updateData() {
+    console.log("#updateData");
+    console.log(this);
     this.props.onUpdate(this.state.value);
   }
   render() {
+    console.log("#render");
+    console.log(this);
     return (
       <FormControl
         componentClass="select"
@@ -141,6 +149,8 @@ class CustomSelectEditor extends React.Component {
         onKeyDown={this.props.onKeyDown}
         onBlur={this.updateData}
         onChange={ev => {
+          console.log("#onChange");
+          console.log(ev);
           this.setState({ value: ev.currentTarget.value });
         }}
       >
